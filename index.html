@@ -557,7 +557,7 @@
 
       .batch-table {
         width: 100%;
-        min-width: 720px;
+        min-width: 800px;
         border-collapse: collapse;
         font-size: 0.8rem;
       }
@@ -691,6 +691,10 @@
               <input type="checkbox" value="5000" checked />
               <span>5,000</span>
             </label>
+            <label class="denom-option">
+              <input type="checkbox" value="1000" checked />
+              <span>1,000</span>
+            </label>
           </div>
 
           <p class="hint">
@@ -724,7 +728,7 @@
             <div class="panel__inner" style="padding: 0; border: none; background: transparent; backdrop-filter: none">
               <span class="field-label">批量 Excel（可选）</span>
               <p class="hint" style="margin-top: 0; padding-top: 0; border: none; margin-bottom: 1rem">
-                列顺序固定：A 姓名 · B 薪水 · C～F 四种张数。导入只读姓名和薪水，张数会按上面的面额设置自动算好；导出后每人一行，一目了然。
+                列顺序固定：A 姓名 · B 薪水 · C～G 五种张数（50000～1000）。导入只读姓名和薪水，张数会按上面的面额设置自动算好；导出后每人一行，一目了然。
               </p>
               <div class="batch-toolbar">
                 <input type="file" id="excel-file" accept=".xlsx,.xls,.csv" />
@@ -744,6 +748,7 @@
                       <th>25000</th>
                       <th>10000</th>
                       <th>5000</th>
+                      <th>1000</th>
                       <th>余数</th>
                     </tr>
                   </thead>
@@ -764,9 +769,17 @@
     <script src="xlsx.full.min.js"></script>
     <script>
       (function () {
-        const DEFAULT_DENOMS = [50000, 25000, 10000, 5000];
-        const DENOM_ORDER = [50000, 25000, 10000, 5000];
-        const EXPORT_HEADERS = ["姓名", "薪水", "50000纸币", "25000纸币", "10000纸币", "5000纸币"];
+        const DEFAULT_DENOMS = [50000, 25000, 10000, 5000, 1000];
+        const DENOM_ORDER = [50000, 25000, 10000, 5000, 1000];
+        const EXPORT_HEADERS = [
+          "姓名",
+          "薪水",
+          "50000纸币",
+          "25000纸币",
+          "10000纸币",
+          "5000纸币",
+          "1000纸币",
+        ];
 
         /** @type {{ name: string, salary: number, counts: Record<number, number>, remainder: number }[]} */
         let batchRows = [];
@@ -911,6 +924,7 @@
             addNum(String(row.counts[25000]));
             addNum(String(row.counts[10000]));
             addNum(String(row.counts[5000]));
+            addNum(String(row.counts[1000]));
 
             const tdRem = document.createElement("td");
             tdRem.className = row.remainder > 0 ? "warn-cell" : "num";
@@ -1053,11 +1067,20 @@
               r.counts[25000],
               r.counts[10000],
               r.counts[5000],
+              r.counts[1000],
             ]);
           });
 
           const ws = XLSX.utils.aoa_to_sheet(aoa);
-          ws["!cols"] = [{ wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }];
+          ws["!cols"] = [
+            { wch: 12 },
+            { wch: 12 },
+            { wch: 10 },
+            { wch: 10 },
+            { wch: 10 },
+            { wch: 10 },
+            { wch: 10 },
+          ];
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "配钞结果");
 

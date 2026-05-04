@@ -1,12 +1,12 @@
 """
-薪酬纸币计算器：从大面额向下贪心分配（50000 → 25000 → 10000 → 5000）。
+薪酬纸币计算器：从大面额向下贪心分配（50000 → 25000 → 10000 → 5000 → 1000）。
 """
 
 from __future__ import annotations
 
 # 面值由大到小，贪心顺序
-DENOMINATIONS_DESC = (50_000, 25_000, 10_000, 5_000)
-STEP = 5_000  # 所有面值的最大公约数
+DENOMINATIONS_DESC = (50_000, 25_000, 10_000, 5_000, 1_000)
+STEP = 1_000  # 所有面值的最大公约数
 
 
 def classify(amount: int) -> tuple[list[tuple[int, int]], int]:
@@ -30,7 +30,7 @@ def classify(amount: int) -> tuple[list[tuple[int, int]], int]:
             if count:
                 result.append((denom, count))
 
-    # 余数无法再用给定纸币凑整（非 5000 倍数时会有剩余）
+    # 余数无法再用给定纸币凑整（非 1000 倍数时会有剩余）
     return result, remainder
 
 
@@ -84,7 +84,7 @@ def main() -> None:
         print()
 
     if args.interactive or args.amount is None:
-        print("薪酬纸币计算器（面值 5000 / 10000 / 25000 / 50000），输入 q 退出。\n")
+        print("薪酬纸币计算器（面值 1000 / 5000 / 10000 / 25000 / 50000），输入 q 退出。\n")
         while True:
             try:
                 s = input("请输入金额: ").strip()

@@ -7,17 +7,17 @@
     <title>薪酬纸币计算器</title>
     <style>
       :root {
-        --bg: #e8f4f1;
-        --bg-blob-1: rgba(167, 243, 208, 0.45);
-        --bg-blob-2: rgba(191, 219, 254, 0.5);
-        --bg-blob-3: rgba(233, 213, 255, 0.35);
+        --bg: #ecfdf7;
+        --bg-blob-1: rgba(45, 212, 191, 0.35);
+        --bg-blob-2: rgba(96, 165, 250, 0.35);
+        --bg-blob-3: rgba(244, 114, 182, 0.22);
         --surface: #ffffff;
         --border: rgba(15, 23, 42, 0.08);
         --border-strong: rgba(15, 23, 42, 0.12);
         --text: #1e293b;
         --muted: #64748b;
-        --accent: #0d9488;
-        --accent-light: #5eead4;
+        --accent: #0f766e;
+        --accent-light: #2dd4bf;
         --accent-soft: rgba(13, 148, 136, 0.1);
         --accent-muted: rgba(13, 148, 136, 0.06);
         --input-bg: #f8fafc;
@@ -29,13 +29,13 @@
         --warn-bg: #fffbeb;
         --warn-border: rgba(245, 158, 11, 0.28);
         --radius-lg: 22px;
-        --radius-md: 14px;
+        --radius-md: 16px;
         --radius-sm: 12px;
         --radius-pill: 999px;
         --font-sans: ui-sans-serif, system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei",
           sans-serif;
-        --shadow-card: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 12px 28px -8px rgba(15, 23, 42, 0.1);
-        --shadow-float: 0 20px 50px -20px rgba(13, 148, 136, 0.25);
+        --shadow-card: 0 8px 22px -12px rgba(15, 23, 42, 0.14), 0 3px 8px rgba(15, 23, 42, 0.04);
+        --shadow-float: 0 20px 50px -20px rgba(45, 212, 191, 0.35);
       }
 
       *,
@@ -63,6 +63,15 @@
         background-attachment: fixed;
       }
 
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.55), transparent 20%),
+          radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.4), transparent 25%);
+      }
+
       .wrap {
         position: relative;
         z-index: 1;
@@ -73,21 +82,23 @@
 
       /* —— 页眉 —— */
       .brand {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
       }
 
       .brand__mark {
         display: inline-flex;
         align-items: center;
-        gap: 0.65rem;
-        margin-bottom: 1rem;
+        justify-content: center;
+        gap: 0.55rem;
+        margin-bottom: 0.75rem;
       }
 
       .brand__icon {
         width: 44px;
         height: 44px;
         border-radius: 14px;
-        background: linear-gradient(145deg, #99f6e4 0%, #a5f3fc 45%, #c4b5fd 100%);
+        background: linear-gradient(145deg, #5eead4 0%, #93c5fd 45%, #f9a8d4 100%);
         box-shadow: var(--shadow-float);
         position: relative;
         flex-shrink: 0;
@@ -114,28 +125,40 @@
 
       .brand h1 {
         font-family: var(--font-sans);
-        font-size: clamp(1.55rem, 4vw, 1.85rem);
+        font-size: clamp(1.65rem, 4.2vw, 2rem);
         font-weight: 700;
         letter-spacing: -0.02em;
         line-height: 1.3;
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.45rem;
         color: var(--text);
+        animation: titleFloat 3.8s ease-in-out infinite;
       }
 
       .brand__lead {
-        margin: 0;
-        max-width: 38em;
+        margin: 0 auto;
+        max-width: 40em;
         font-size: 0.95rem;
         color: var(--muted);
         font-weight: 400;
       }
 
       .brand__line {
-        margin-top: 1.35rem;
+        margin: 1rem auto 0;
         height: 3px;
+        width: min(430px, 72vw);
         border-radius: 3px;
-        background: linear-gradient(90deg, var(--accent-light), transparent 65%);
-        opacity: 0.55;
+        background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+        opacity: 0.65;
+      }
+
+      @keyframes titleFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-2px);
+        }
       }
 
       /* —— 主面板 —— */
@@ -145,6 +168,18 @@
         background: var(--surface);
         border: 1px solid var(--border);
         box-shadow: var(--shadow-card);
+        overflow: hidden;
+      }
+
+      .panel::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #2dd4bf, #60a5fa, #f472b6);
+        opacity: 0.9;
       }
 
       .panel__inner {
@@ -214,14 +249,14 @@
         color: #fff;
         cursor: pointer;
         white-space: nowrap;
-        background: linear-gradient(165deg, #14b8a6 0%, #0d9488 55%, #0f766e 100%);
-        box-shadow: 0 4px 14px -2px rgba(13, 148, 136, 0.45);
+        background: linear-gradient(145deg, #2dd4bf 0%, #0ea5a3 52%, #2563eb 100%);
+        box-shadow: 0 10px 24px -10px rgba(37, 99, 235, 0.5);
         transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
       }
 
       button.primary:hover {
-        filter: brightness(1.03);
-        box-shadow: 0 8px 22px -4px rgba(13, 148, 136, 0.5);
+        filter: brightness(1.06);
+        box-shadow: 0 14px 30px -12px rgba(37, 99, 235, 0.55);
       }
 
       button.primary:active {
@@ -288,7 +323,7 @@
         padding: 0.65rem 0.8rem;
         border-radius: var(--radius-md);
         border: 1px solid var(--border);
-        background: #fafafa;
+        background: linear-gradient(160deg, #ffffff, #f8fafc);
         cursor: pointer;
         transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
       }
@@ -296,6 +331,7 @@
       .denom-option:hover {
         border-color: rgba(13, 148, 136, 0.35);
         background: #fff;
+        transform: translateY(-1px);
       }
 
       .denom-option:has(input:checked) {
@@ -385,6 +421,11 @@
         font-weight: 600;
         color: var(--accent);
         margin: 0 0 0.75rem;
+        letter-spacing: 0.03em;
+        display: inline-block;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        background: linear-gradient(120deg, rgba(45, 212, 191, 0.18), rgba(96, 165, 250, 0.16));
       }
 
       .table-wrap {
@@ -447,7 +488,7 @@
         padding: 0.9rem 1rem;
         border-radius: var(--radius-md);
         border: 1px solid var(--border);
-        background: linear-gradient(120deg, var(--accent-muted) 0%, #fff 100%);
+        background: linear-gradient(120deg, rgba(45, 212, 191, 0.12) 0%, rgba(96, 165, 250, 0.08) 100%);
         font-size: 0.88rem;
         display: flex;
         justify-content: space-between;
@@ -635,6 +676,26 @@
         border-radius: 6px;
         background: var(--accent-muted);
         color: var(--accent);
+      }
+
+      @media (max-width: 768px) {
+        .wrap {
+          padding-top: 1.4rem;
+        }
+
+        .amount-row {
+          flex-direction: column;
+        }
+
+        button.primary,
+        button.secondary {
+          width: 100%;
+        }
+
+        .batch-toolbar {
+          display: grid;
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>

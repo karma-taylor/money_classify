@@ -1,4 +1,4 @@
-# 静态站点部署到 GitHub Pages（与官方 static 模板一致：单 job）
+﻿# 闈欐€佺珯鐐归儴缃插埌 GitHub Pages锛堜笌瀹樻柟 static 妯℃澘涓€鑷达細鍗?job锛?
 name: Deploy to GitHub Pages
 
 on:
@@ -29,7 +29,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "."
+          path: "web"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

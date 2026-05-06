@@ -1,0 +1,16 @@
+﻿{
+  "description": "薪酬配钞小程序",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "3.6.3",
+  "appid": "touristappid",
+  "projectname": "money_classify_miniapp",
+  "miniprogramRoot": "miniapp",
+  "condition": {}
+}

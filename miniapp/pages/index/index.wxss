@@ -1,0 +1,124 @@
+﻿.hero {
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.subtitle {
+  margin-top: 8rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.section-label {
+  margin-top: 20rpx;
+  margin-bottom: 10rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.amount-input {
+  background: #f8fafc;
+  border: 1rpx solid #dbe3ef;
+  border-radius: 16rpx;
+  padding: 18rpx;
+  font-size: 30rpx;
+}
+
+.row {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.center {
+  align-items: center;
+}
+
+.btn-tiny {
+  margin: 0;
+  padding: 8rpx 20rpx;
+  line-height: 1.8;
+  border-radius: 999rpx;
+  border: 1rpx dashed #94a3b8;
+  background: #fff;
+  color: #475569;
+  font-size: 22rpx;
+}
+
+.denom-grid {
+  margin-top: 6rpx;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12rpx;
+}
+
+.denom-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #f8fafc;
+  border: 1rpx solid #dbe3ef;
+  border-radius: 14rpx;
+  padding: 12rpx;
+  font-size: 26rpx;
+}
+
+.calc-btn {
+  margin-top: 24rpx;
+}
+
+.result-table {
+  border: 1rpx solid #e2e8f0;
+  border-radius: 14rpx;
+  overflow: hidden;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 12rpx 16rpx;
+  border-bottom: 1rpx solid #edf2f7;
+  font-size: 24rpx;
+}
+
+.result-row:last-child {
+  border-bottom: 0;
+}
+
+.result-row.header {
+  background: #f0fdfa;
+  font-weight: 600;
+  color: #0f766e;
+}
+
+.subtotal {
+  margin-top: 16rpx;
+  display: flex;
+  justify-content: space-between;
+  padding: 14rpx 16rpx;
+  border-radius: 14rpx;
+  background: #f0fdfa;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.jump {
+  display: block;
+  margin: 20rpx 0;
+  text-align: center;
+  color: #0d9488;
+  font-size: 26rpx;
+}

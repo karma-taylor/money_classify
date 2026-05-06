@@ -1,0 +1,54 @@
+﻿.section-label {
+  margin-top: 18rpx;
+  margin-bottom: 10rpx;
+  font-size: 26rpx;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.denom-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.chip {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: #ecfeff;
+  color: #0f766e;
+  font-size: 22rpx;
+}
+
+.btn-row {
+  margin-top: 16rpx;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10rpx;
+}
+
+.status {
+  margin-top: 16rpx;
+}
+
+.table-wrap {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.table {
+  display: grid;
+  grid-template-columns: 160rpx 150rpx repeat(6, 120rpx);
+  border-bottom: 1rpx solid #e2e8f0;
+}
+
+.table text {
+  padding: 14rpx 10rpx;
+  font-size: 24rpx;
+}
+
+.table-header {
+  background: #f0fdfa;
+  color: #0f766e;
+  font-weight: 600;
+}

@@ -1,0 +1,52 @@
+﻿<view class="container">
+  <view class="card hero">
+    <view class="title">薪酬配钞计算器</view>
+    <view class="subtitle">从大面额往下拆，支持 50000/25000/10000/5000/1000</view>
+
+    <view class="section-label">输入金额</view>
+    <input class="amount-input" type="digit" placeholder="输入数字金额" value="{{amountInput}}" bindinput="onAmountInput" />
+
+    <view class="row space-between center">
+      <view class="section-label no-margin">可用面额</view>
+      <button class="btn-tiny" bindtap="toggleAll">一键切换全选</button>
+    </view>
+
+    <view class="denom-grid">
+      <label class="denom-item" wx:for="{{denominations}}" wx:key="denom">
+        <checkbox value="{{item.denom}}" checked="{{item.checked}}" bindchange="onCheckboxChange" />
+        <text>{{item.label}}</text>
+      </label>
+    </view>
+
+    <button class="btn-primary calc-btn" bindtap="handleCalculate">算一下</button>
+    <view wx:if="{{errorMsg}}" class="error">{{errorMsg}}</view>
+  </view>
+
+  <view class="card" wx:if="{{hasResult}}">
+    <view class="section-title">拆好的结果</view>
+
+    <view wx:if="{{parts.length}}" class="result-table">
+      <view class="result-row header">
+        <text>面额</text><text>张数</text><text>小计</text>
+      </view>
+      <view class="result-row" wx:for="{{parts}}" wx:key="denom">
+        <text>{{item.label}}</text>
+        <text>{{item.count}}</text>
+        <text>{{item.subtotalLabel}}</text>
+      </view>
+    </view>
+
+    <view wx:else class="helper">当前金额小于所选最小面额，暂时无法分配。</view>
+
+    <view class="subtotal">
+      <text>纸币合计</text>
+      <text>{{paperSumLabel}}</text>
+    </view>
+
+    <view wx:if="{{remainder > 0}}" class="warn">
+      还剩 {{remainderLabel}} 没法刚好凑满，请准备零钱或调整面额。
+    </view>
+  </view>
+
+  <navigator class="jump" url="/pages/batch/batch">去批量 Excel 处理</navigator>
+</view>

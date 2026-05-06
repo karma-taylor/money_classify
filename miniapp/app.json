@@ -1,0 +1,15 @@
+﻿{
+  "pages": [
+    "pages/index/index",
+    "pages/batch/batch"
+  ],
+  "window": {
+    "navigationBarTitleText": "薪酬配钞工具",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f1f8f6",
+    "backgroundTextStyle": "light"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

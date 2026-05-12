@@ -3,39 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#e8f4f1" />
-    <title>薪酬纸币计算器</title>
+    <meta name="theme-color" content="#0b1220" />
+    <title>薪酬纸币计算器 · Wealth Distribution Console</title>
     <style>
       :root {
-        --bg: #ecfdf7;
-        --bg-blob-1: rgba(45, 212, 191, 0.35);
-        --bg-blob-2: rgba(96, 165, 250, 0.35);
-        --bg-blob-3: rgba(244, 114, 182, 0.22);
-        --surface: #ffffff;
-        --border: rgba(15, 23, 42, 0.08);
-        --border-strong: rgba(15, 23, 42, 0.12);
-        --text: #1e293b;
-        --muted: #64748b;
-        --accent: #0f766e;
-        --accent-light: #2dd4bf;
-        --accent-soft: rgba(13, 148, 136, 0.1);
-        --accent-muted: rgba(13, 148, 136, 0.06);
-        --input-bg: #f8fafc;
-        --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
-        --danger: #dc2626;
-        --danger-bg: #fef2f2;
-        --danger-border: rgba(220, 38, 38, 0.25);
-        --warn: #b45309;
-        --warn-bg: #fffbeb;
-        --warn-border: rgba(245, 158, 11, 0.28);
-        --radius-lg: 22px;
-        --radius-md: 16px;
-        --radius-sm: 12px;
-        --radius-pill: 999px;
-        --font-sans: ui-sans-serif, system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei",
-          sans-serif;
-        --shadow-card: 0 8px 22px -12px rgba(15, 23, 42, 0.14), 0 3px 8px rgba(15, 23, 42, 0.04);
-        --shadow-float: 0 20px 50px -20px rgba(45, 212, 191, 0.35);
+        --bg-base: #0a1020;
+        --bg-grad-1: #0b1428;
+        --bg-grad-2: #0e1a32;
+        --surface: #111a2c;
+        --surface-2: #16213a;
+        --surface-3: #1c2a45;
+        --border: rgba(148, 163, 184, 0.12);
+        --border-strong: rgba(148, 163, 184, 0.22);
+        --grid-line: rgba(148, 163, 184, 0.08);
+
+        --text: #e6ecf5;
+        --text-dim: #c5cee0;
+        --muted: #8593ad;
+        --muted-soft: #5d6b85;
+
+        --blue: #3b82f6;
+        --blue-bright: #60a5fa;
+        --cyan: #22d3ee;
+        --indigo: #818cf8;
+        --violet: #a78bfa;
+        --teal: #2dd4bf;
+
+        --series-1: #60a5fa;
+        --series-2: #38bdf8;
+        --series-3: #22d3ee;
+        --series-4: #818cf8;
+        --series-5: #a78bfa;
+
+        --pos: #34d399;
+        --warn: #fbbf24;
+        --danger: #f87171;
+
+        --radius-lg: 14px;
+        --radius-md: 10px;
+        --radius-sm: 6px;
+
+        --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, "Cascadia Mono",
+          "SF Mono", Consolas, monospace;
+        --sans: ui-sans-serif, "Inter", system-ui, "Segoe UI", "PingFang SC",
+          "Microsoft YaHei", sans-serif;
+
+        --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.02) inset,
+          0 12px 32px -16px rgba(0, 0, 0, 0.6);
       }
 
       *,
@@ -44,788 +58,920 @@
         box-sizing: border-box;
       }
 
-      html {
-        scroll-behavior: smooth;
+      html,
+      body {
+        margin: 0;
+        padding: 0;
       }
 
       body {
-        margin: 0;
         min-height: 100vh;
-        font-family: var(--font-sans);
-        font-size: 15px;
-        color: var(--text);
+        font-family: var(--sans);
+        font-size: 14px;
         line-height: 1.55;
-        background-color: var(--bg);
-        background-image:
-          radial-gradient(ellipse 90% 70% at 10% -10%, var(--bg-blob-1) 0%, transparent 55%),
-          radial-gradient(ellipse 80% 60% at 95% 15%, var(--bg-blob-2) 0%, transparent 50%),
-          radial-gradient(ellipse 70% 50% at 50% 100%, var(--bg-blob-3) 0%, transparent 55%);
+        color: var(--text);
+        background:
+          radial-gradient(1200px 600px at 8% -10%, rgba(59, 130, 246, 0.16), transparent 60%),
+          radial-gradient(900px 500px at 110% 10%, rgba(34, 211, 238, 0.1), transparent 55%),
+          linear-gradient(180deg, var(--bg-grad-1), var(--bg-base) 60%, var(--bg-grad-2));
         background-attachment: fixed;
+        font-variant-numeric: tabular-nums;
       }
 
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background-image: radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.55), transparent 20%),
-          radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.4), transparent 25%);
+      /* —— 顶部状态条 —— */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 1.25rem;
+        background: rgba(8, 13, 26, 0.72);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
       }
 
-      .wrap {
-        position: relative;
-        z-index: 1;
-        max-width: min(960px, 100%);
-        margin: 0 auto;
-        padding: clamp(2rem, 6vw, 3.25rem) clamp(1rem, 4vw, 1.5rem) 3rem;
-      }
-
-      /* —— 页眉 —— */
       .brand {
-        margin-bottom: 1.5rem;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
       }
 
       .brand__mark {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.55rem;
-        margin-bottom: 0.75rem;
-        width: 100%;
-      }
-
-      .brand__icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 14px;
-        background: linear-gradient(145deg, #5eead4 0%, #93c5fd 45%, #f9a8d4 100%);
-        box-shadow: var(--shadow-float);
+        width: 26px;
+        height: 26px;
+        border-radius: 7px;
+        background:
+          conic-gradient(from 210deg, #60a5fa, #22d3ee, #818cf8, #60a5fa);
         position: relative;
-        flex-shrink: 0;
+        box-shadow: 0 4px 14px -4px rgba(96, 165, 250, 0.6);
       }
 
-      .brand__icon::before {
+      .brand__mark::after {
         content: "";
         position: absolute;
-        left: 11px;
-        right: 11px;
-        top: 14px;
-        height: 3px;
-        border-radius: 2px;
-        background: rgba(255, 255, 255, 0.92);
-        box-shadow: 0 7px 0 rgba(255, 255, 255, 0.85), 0 14px 0 rgba(255, 255, 255, 0.75);
+        inset: 5px;
+        border-radius: 4px;
+        background: var(--bg-base);
       }
 
-      .brand__eyebrow {
-        font-size: 0.78rem;
+      .brand__title {
         font-weight: 600;
-        color: var(--accent);
-        letter-spacing: 0.06em;
-      }
-
-      .brand h1 {
-        font-family: var(--font-sans);
-        font-size: clamp(1.65rem, 4.2vw, 2rem);
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        line-height: 1.3;
-        margin: 0 0 0.45rem;
+        font-size: 13px;
+        letter-spacing: 0.02em;
         color: var(--text);
-        animation: titleFloat 3.8s ease-in-out infinite;
       }
 
-      .brand__lead {
-        margin: 0 auto;
-        max-width: 40em;
-        font-size: 0.95rem;
+      .brand__sub {
+        font-size: 11px;
+        font-family: var(--mono);
         color: var(--muted);
-        font-weight: 400;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
 
-      .brand__line {
-        margin: 1rem auto 0;
-        height: 3px;
-        width: min(430px, 72vw);
-        border-radius: 3px;
-        background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
-        opacity: 0.65;
+      .topbar__meta {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
       }
 
-      @keyframes titleFloat {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-2px);
-        }
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 1px;
       }
 
-      /* —— 主面板 —— */
-      .panel {
-        position: relative;
-        border-radius: var(--radius-lg);
-        background: var(--surface);
+      .meta-item .k {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .meta-item .v {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-dim);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .live-dot {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--muted);
+        font-family: var(--mono);
+        letter-spacing: 0.08em;
+      }
+
+      .live-dot::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--pos);
+        box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.15);
+        animation: livePulse 2.4s ease-in-out infinite;
+      }
+
+      @keyframes livePulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.55; }
+      }
+
+      /* —— 容器 —— */
+      .wrap {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 1.25rem clamp(0.85rem, 2.5vw, 1.5rem) 3rem;
+      }
+
+      .page-title {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        margin: 0.25rem 0 1rem;
+      }
+
+      .page-title h1 {
+        font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+        margin: 0;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+
+      .page-title .tag {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+      }
+
+      /* —— 主网格 —— */
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+        gap: 1rem;
+      }
+
+      .card {
+        background: linear-gradient(180deg, var(--surface), var(--surface-2));
         border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
         box-shadow: var(--shadow-card);
         overflow: hidden;
       }
 
-      .panel::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, #2dd4bf, #60a5fa, #f472b6);
-        opacity: 0.9;
-      }
-
-      .panel__inner {
-        border-radius: var(--radius-lg);
-        padding: clamp(1.5rem, 4vw, 2rem);
-      }
-
-      .field-label {
-        display: block;
-        font-size: 0.82rem;
-        font-weight: 600;
-        color: var(--muted);
-        margin-bottom: 0.5rem;
-      }
-
-      .amount-row {
-        display: flex;
-        gap: 0.65rem;
-        align-items: stretch;
-        margin-bottom: 1.5rem;
-      }
-
-      .input-wrap {
-        flex: 1;
-        position: relative;
-        min-width: 0;
-      }
-
-      input[type="number"] {
-        width: 100%;
-        font-family: var(--mono);
-        font-size: 1.15rem;
-        font-weight: 500;
-        font-variant-numeric: tabular-nums;
-        letter-spacing: 0.02em;
-        padding: 0.85rem 1rem;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-md);
-        background: var(--input-bg);
-        color: var(--text);
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      }
-
-      input[type="number"]::placeholder {
-        color: #94a3b8;
-        font-weight: 400;
-      }
-
-      input[type="number"]:hover {
-        border-color: var(--border-strong);
-      }
-
-      input[type="number"]:focus {
-        outline: none;
-        border-color: var(--accent);
-        background: #fff;
-        box-shadow: 0 0 0 3px var(--accent-soft);
-      }
-
-      button.primary {
-        font-family: inherit;
-        font-weight: 600;
-        font-size: 0.9rem;
-        padding: 0.85rem 1.35rem;
-        border: none;
-        border-radius: var(--radius-pill);
-        color: #fff;
-        cursor: pointer;
-        white-space: nowrap;
-        background: linear-gradient(145deg, #2dd4bf 0%, #0ea5a3 52%, #2563eb 100%);
-        box-shadow: 0 10px 24px -10px rgba(37, 99, 235, 0.5);
-        transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
-      }
-
-      button.primary:hover {
-        filter: brightness(1.06);
-        box-shadow: 0 14px 30px -12px rgba(37, 99, 235, 0.55);
-      }
-
-      button.primary:active {
-        transform: scale(0.98);
-      }
-
-      button.ghost {
-        font-family: inherit;
-        font-size: 0.78rem;
-        font-weight: 500;
-        padding: 0.38rem 0.8rem;
-        border: 1px dashed var(--border-strong);
-        border-radius: var(--radius-pill);
-        background: transparent;
-        color: var(--muted);
-        cursor: pointer;
-        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      }
-
-      button.ghost:hover {
-        color: var(--accent);
-        border-color: var(--accent);
-        border-style: solid;
-        background: var(--accent-muted);
-      }
-
-      button.toggle-all {
-        font-family: inherit;
-        font-size: 0.78rem;
-        font-weight: 500;
-        padding: 0.38rem 0.85rem;
-        border: 1px dashed var(--border-strong);
-        border-radius: var(--radius-pill);
-        background: transparent;
-        color: var(--muted);
-        cursor: pointer;
-        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      }
-
-      button.toggle-all:hover {
-        color: var(--accent);
-        border-color: var(--accent);
-        border-style: solid;
-        background: var(--accent-muted);
-      }
-
-      .denom-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.65rem;
-      }
-
-      .denom-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.55rem;
-      }
-
-      .denom-option {
-        display: flex;
-        align-items: center;
-        gap: 0.55rem;
-        padding: 0.65rem 0.8rem;
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border);
-        background: linear-gradient(160deg, #ffffff, #f8fafc);
-        cursor: pointer;
-        transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
-      }
-
-      .denom-option:hover {
-        border-color: rgba(13, 148, 136, 0.35);
-        background: #fff;
-        transform: translateY(-1px);
-      }
-
-      .denom-option:has(input:checked) {
-        border-color: var(--accent);
-        background: linear-gradient(160deg, var(--accent-soft) 0%, #fff 100%);
-        box-shadow: 0 2px 8px -2px rgba(13, 148, 136, 0.2);
-      }
-
-      .denom-option input {
-        width: 1.05rem;
-        height: 1.05rem;
-        accent-color: var(--accent);
-        cursor: pointer;
-        flex-shrink: 0;
-      }
-
-      .denom-option span {
-        font-family: var(--mono);
-        font-size: 0.9rem;
-        font-weight: 500;
-        font-variant-numeric: tabular-nums;
-        color: var(--text);
-      }
-
-      .hint {
-        margin-top: 1.15rem;
-        padding-top: 1.1rem;
-        border-top: 1px dashed var(--border);
-        font-size: 0.8rem;
-        color: var(--muted);
-        line-height: 1.65;
-      }
-
-      .error {
-        margin-top: 0.85rem;
-        padding: 0.7rem 0.95rem;
-        border-radius: var(--radius-md);
-        font-size: 0.85rem;
-        border: 1px solid var(--danger-border);
-        background: var(--danger-bg);
-        color: var(--danger);
-        display: none;
-      }
-
-      .error.visible {
-        display: block;
-        animation: softPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      @keyframes softPop {
-        from {
-          opacity: 0;
-          transform: scale(0.97);
-        }
-        to {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      /* —— 结果 —— */
-      .result {
-        margin-top: 1.35rem;
-        padding-top: 1.25rem;
-        border-top: 1px dashed var(--border);
-        display: none;
-      }
-
-      .result.visible {
-        display: block;
-        animation: reveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
-
-      @keyframes reveal {
-        from {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .result__title {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--accent);
-        margin: 0 0 0.75rem;
-        letter-spacing: 0.03em;
-        display: inline-block;
-        padding: 0.25rem 0.65rem;
-        border-radius: 999px;
-        background: linear-gradient(120deg, rgba(45, 212, 191, 0.18), rgba(96, 165, 250, 0.16));
-      }
-
-      .table-wrap {
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        background: #fafafa;
-      }
-
-      .result-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.88rem;
-      }
-
-      .result-table thead {
-        background: var(--accent-muted);
-      }
-
-      .result-table th,
-      .result-table td {
-        padding: 0.6rem 0.9rem;
-        text-align: left;
+      .card__head {
+        padding: 0.85rem 1rem 0.65rem;
         border-bottom: 1px solid var(--border);
-      }
-
-      .result-table th {
-        color: var(--muted);
-        font-weight: 600;
-        font-size: 0.72rem;
-      }
-
-      .result-table td {
-        font-variant-numeric: tabular-nums;
-      }
-
-      .result-table td:last-child,
-      .result-table th:last-child {
-        text-align: right;
-        font-family: var(--mono);
-        color: var(--accent);
-      }
-
-      .result-table tbody tr:last-child td {
-        border-bottom: none;
-      }
-
-      .result-table tbody tr:hover td {
-        background: rgba(255, 255, 255, 0.8);
-      }
-
-      .muted-cell {
-        color: var(--muted) !important;
-        font-family: var(--font-sans) !important;
-        font-size: 0.84rem;
-      }
-
-      .subtotal {
-        margin-top: 0.85rem;
-        padding: 0.9rem 1rem;
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border);
-        background: linear-gradient(120deg, rgba(45, 212, 191, 0.12) 0%, rgba(96, 165, 250, 0.08) 100%);
-        font-size: 0.88rem;
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        align-items: center;
-      }
-
-      .subtotal span:first-child {
-        color: var(--muted);
-      }
-
-      .subtotal span:last-child {
-        font-family: var(--mono);
-        font-weight: 700;
-        font-size: 1rem;
-        color: var(--accent);
-        font-variant-numeric: tabular-nums;
-      }
-
-      .alert {
-        margin-top: 0.75rem;
-        padding: 0.75rem 0.95rem;
-        border-radius: var(--radius-md);
-        font-size: 0.82rem;
-        line-height: 1.55;
-        border: 1px solid var(--warn-border);
-        background: var(--warn-bg);
-        color: var(--warn);
-      }
-
-      footer {
-        margin-top: 2.25rem;
-        text-align: center;
-        font-size: 0.78rem;
-        color: #94a3b8;
-      }
-
-      /* —— 批量 Excel —— */
-      .batch-panel {
-        margin-top: 1.5rem;
-      }
-
-      .batch-panel .panel__inner {
-        padding-top: 1.5rem;
-        border-top: 1px dashed var(--border);
-      }
-
-      .batch-toolbar {
-        display: flex;
-        flex-wrap: wrap;
         gap: 0.5rem;
-        align-items: center;
-        margin-bottom: 0.75rem;
       }
 
-      .batch-toolbar .field-label {
-        margin-bottom: 0;
-        margin-right: 0.25rem;
-      }
-
-      input[type="file"] {
-        position: absolute;
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        z-index: -1;
-      }
-
-      button.secondary {
-        font-family: inherit;
+      .card__title {
+        font-size: 12px;
         font-weight: 600;
-        font-size: 0.8rem;
-        padding: 0.55rem 1rem;
-        border-radius: var(--radius-pill);
-        border: 1px solid var(--border-strong);
-        background: #fff;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-dim);
+      }
+
+      .card__hint {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: var(--mono);
+        letter-spacing: 0.04em;
+      }
+
+      .card__body {
+        padding: 1rem;
+      }
+
+      /* —— 输入与控件 —— */
+      .label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 0.45rem;
+      }
+
+      .input,
+      .select {
+        width: 100%;
+        font-family: var(--mono);
+        font-size: 15px;
+        font-variant-numeric: tabular-nums;
+        padding: 0.7rem 0.85rem;
+        background: rgba(8, 13, 26, 0.7);
         color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        transition: border-color 0.18s ease, box-shadow 0.18s ease,
+          background 0.18s ease;
+        letter-spacing: 0.02em;
+      }
+
+      .input::placeholder {
+        color: var(--muted-soft);
+        font-family: var(--sans);
+        font-weight: 400;
+        font-size: 13px;
+        letter-spacing: 0;
+      }
+
+      .input:focus,
+      .select:focus {
+        outline: none;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+        background: rgba(11, 20, 40, 0.95);
+      }
+
+      .row-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.65rem;
+      }
+
+      .btn {
+        font-family: var(--sans);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 0.6rem 0.9rem;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-strong);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text-dim);
         cursor: pointer;
-        transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+        letter-spacing: 0.04em;
+        transition: border-color 0.15s ease, background 0.15s ease,
+          color 0.15s ease;
       }
 
-      button.secondary:hover:not(:disabled) {
-        border-color: var(--accent);
-        color: var(--accent);
-        background: var(--accent-muted);
+      .btn:hover:not(:disabled) {
+        color: var(--text);
+        border-color: var(--blue-bright);
+        background: rgba(59, 130, 246, 0.08);
       }
 
-      button.secondary:disabled {
+      .btn:disabled {
         opacity: 0.4;
         cursor: not-allowed;
       }
 
-      .batch-meta {
-        font-size: 0.78rem;
-        color: var(--muted);
-        width: 100%;
-        margin-top: 0.1rem;
+      .btn--primary {
+        flex: 1;
+        background: linear-gradient(180deg, #3b82f6, #2563eb);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 8px 20px -10px rgba(37, 99, 235, 0.65);
       }
 
-      .batch-scroll {
-        overflow-x: auto;
-        margin-top: 0.65rem;
-        border-radius: var(--radius-md);
-        border: 1px solid var(--border);
-        background: #fafafa;
+      .btn--primary:hover:not(:disabled) {
+        background: linear-gradient(180deg, #4690ff, #2c6ff0);
+        border-color: transparent;
+        color: #fff;
       }
 
-      .batch-table {
-        width: 100%;
-        min-width: 800px;
-        border-collapse: collapse;
-        font-size: 0.8rem;
-      }
-
-      .batch-table thead {
-        background: var(--accent-muted);
-      }
-
-      .batch-table th,
-      .batch-table td {
+      .btn--icon {
         padding: 0.5rem 0.7rem;
-        text-align: left;
+        font-size: 11px;
+      }
+
+      /* —— 面额选择 —— */
+      .denom-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin: 1.1rem 0 0.5rem;
+      }
+
+      .denom-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.4rem;
+      }
+
+      .chip {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: rgba(8, 13, 26, 0.55);
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chip:hover {
+        border-color: var(--border-strong);
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .chip:has(input:checked) {
+        border-color: var(--blue);
+        background: linear-gradient(180deg,
+          rgba(59, 130, 246, 0.1),
+          rgba(59, 130, 246, 0.02));
+      }
+
+      .chip input {
+        accent-color: var(--blue-bright);
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+      }
+
+      .chip__face {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .chip__amount {
+        font-family: var(--mono);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em;
+      }
+
+      .chip__tag {
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        font-family: var(--mono);
+      }
+
+      .chip__dot {
+        position: absolute;
+        right: 8px;
+        top: 8px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        opacity: 0.6;
+      }
+      .chip[data-i="0"] .chip__dot { background: var(--series-1); }
+      .chip[data-i="1"] .chip__dot { background: var(--series-2); }
+      .chip[data-i="2"] .chip__dot { background: var(--series-3); }
+      .chip[data-i="3"] .chip__dot { background: var(--series-4); }
+      .chip[data-i="4"] .chip__dot { background: var(--series-5); }
+
+      .hint {
+        margin: 0.85rem 0 0;
+        padding: 0.65rem 0.75rem;
+        border-radius: var(--radius-sm);
+        background: rgba(59, 130, 246, 0.05);
+        border-left: 2px solid var(--blue);
+        font-size: 11.5px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .alert {
+        margin-top: 0.65rem;
+        padding: 0.6rem 0.75rem;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        display: none;
+      }
+
+      .alert--err {
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        background: rgba(248, 113, 113, 0.08);
+        color: var(--danger);
+      }
+
+      .alert--warn {
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        background: rgba(251, 191, 36, 0.08);
+        color: var(--warn);
+      }
+
+      .alert.visible {
+        display: block;
+      }
+
+      /* —— 输出区 KPI —— */
+      .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg,
+          rgba(59, 130, 246, 0.04),
+          transparent);
+      }
+
+      .kpi {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 0.55rem 0.7rem;
+        border-radius: var(--radius-sm);
+        background: rgba(8, 13, 26, 0.5);
+        border: 1px solid var(--border);
+      }
+
+      .kpi__k {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+
+      .kpi__v {
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0.01em;
+      }
+
+      .kpi__delta {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .kpi--accent .kpi__v { color: var(--blue-bright); }
+      .kpi--warn .kpi__v { color: var(--warn); }
+      .kpi--ok .kpi__v { color: var(--pos); }
+
+      /* —— Donut + 横向柱状图 —— */
+      .viz {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 1.25rem;
+        padding: 1.1rem 1rem;
+      }
+
+      .donut-wrap {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+      }
+
+      .donut {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .donut__track {
+        fill: none;
+        stroke: rgba(148, 163, 184, 0.1);
+        stroke-width: 14;
+      }
+
+      .donut__seg {
+        fill: none;
+        stroke-width: 14;
+        stroke-linecap: butt;
+        transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+          stroke-dasharray 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .donut__center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        pointer-events: none;
+      }
+
+      .donut__center .k {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+
+      .donut__center .v {
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .donut__center .sub {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+      }
+
+      .bars {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+      }
+
+      .bar {
+        display: grid;
+        grid-template-columns: 78px 1fr 110px 60px;
+        align-items: center;
+        gap: 0.7rem;
+        font-size: 12px;
+      }
+
+      .bar__face {
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .bar__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .bar__track {
+        height: 8px;
+        background: rgba(148, 163, 184, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .bar__fill {
+        height: 100%;
+        border-radius: 999px;
+        width: 0%;
+        transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .bar__value {
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+        color: var(--text-dim);
+        text-align: right;
+      }
+
+      .bar__count {
+        font-family: var(--mono);
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        text-align: right;
+      }
+
+      .empty-viz {
+        padding: 2.5rem 1rem;
+        text-align: center;
+        color: var(--muted);
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.05em;
+      }
+
+      /* —— 批量表格 —— */
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border);
+        background: rgba(8, 13, 26, 0.4);
+      }
+
+      .toolbar .spacer { flex: 1; }
+
+      .toolbar input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .toolbar__status {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.02em;
+      }
+
+      .grid-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      .grid-table thead th {
+        position: sticky;
+        top: 0;
+        background: rgba(11, 20, 40, 0.95);
+        padding: 0.55rem 0.85rem;
+        text-align: right;
+        font-weight: 500;
+        font-size: 10.5px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
         border-bottom: 1px solid var(--border);
         white-space: nowrap;
       }
 
-      .batch-table th {
-        font-size: 0.68rem;
-        color: var(--muted);
-        font-weight: 600;
+      .grid-table thead th:first-child {
+        text-align: left;
       }
 
-      .batch-table td {
+      .grid-table tbody td {
+        padding: 0.55rem 0.85rem;
+        text-align: right;
+        border-bottom: 1px solid var(--grid-line);
+        font-family: var(--mono);
         font-variant-numeric: tabular-nums;
+        color: var(--text-dim);
+        white-space: nowrap;
       }
 
-      .batch-table td.num {
-        font-family: var(--mono);
-        color: var(--accent);
+      .grid-table tbody td:first-child {
+        text-align: left;
+        color: var(--text);
+        font-family: var(--sans);
       }
 
-      .batch-table td.name-cell {
-        max-width: 140px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .grid-table tbody tr:hover td {
+        background: rgba(59, 130, 246, 0.05);
       }
 
-      .batch-table tbody tr:last-child td {
-        border-bottom: none;
-      }
-
-      .batch-table .warn-cell {
+      .grid-table .rem-warn {
         color: var(--warn);
-        font-family: var(--font-sans);
-        font-size: 0.76rem;
       }
 
-      .batch-error {
-        margin-top: 0.65rem;
-        padding: 0.6rem 0.85rem;
-        border-radius: var(--radius-md);
-        font-size: 0.82rem;
-        border: 1px solid var(--danger-border);
-        background: var(--danger-bg);
-        color: var(--danger);
-        display: none;
+      .grid-table .rem-zero {
+        color: var(--muted-soft);
       }
 
-      .batch-error.visible {
-        display: block;
+      .batch-scroll {
+        max-height: 380px;
+        overflow: auto;
       }
 
-      .lib-hint {
-        font-size: 0.72rem;
-        color: #94a3b8;
-        margin-top: 0.55rem;
-        line-height: 1.55;
-      }
-
-      .lib-hint code,
-      .hint code {
+      .batch-empty {
+        padding: 2rem 1rem;
+        text-align: center;
+        color: var(--muted);
         font-family: var(--mono);
-        font-size: 0.85em;
-        padding: 0.12rem 0.35rem;
-        border-radius: 6px;
-        background: var(--accent-muted);
-        color: var(--accent);
+        font-size: 12px;
       }
 
-      @media (max-width: 768px) {
-        .wrap {
-          padding-top: 1.4rem;
-        }
+      footer {
+        margin-top: 2rem;
+        text-align: center;
+        color: var(--muted-soft);
+        font-family: var(--mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+      }
 
-        .amount-row {
-          flex-direction: column;
+      /* —— 响应式 —— */
+      @media (max-width: 920px) {
+        .grid {
+          grid-template-columns: 1fr;
         }
-
-        button.primary,
-        button.secondary {
-          width: 100%;
+        .viz {
+          grid-template-columns: 1fr;
         }
+        .donut-wrap {
+          width: 180px;
+          height: 180px;
+        }
+        .bar {
+          grid-template-columns: 70px 1fr 100px 50px;
+        }
+      }
 
-        .batch-toolbar {
-          display: grid;
+      @media (max-width: 640px) {
+        .topbar__meta {
+          display: none;
+        }
+        .kpi-row {
           grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <header class="brand">
-        <div class="brand__mark">
-          <div class="brand__icon" aria-hidden="true"></div>
-          <span class="brand__eyebrow">轻松配钞</span>
-        </div>
-        <h1>薪酬纸币计算器</h1>
-        <p class="brand__lead">
-          勾选这次手里有哪些纸币就好，剩下的交给计算器——从大面额往下拆，清清楚楚；有尾数也会温柔提醒你。
-        </p>
-        <div class="brand__line" aria-hidden="true"></div>
-      </header>
-
-      <div class="panel">
-        <div class="panel__inner">
-          <label class="field-label" for="amount">要开多少现金？</label>
-          <div class="amount-row">
-            <div class="input-wrap">
-              <input
-                id="amount"
-                type="number"
-                inputmode="numeric"
-                min="0"
-                step="1"
-                placeholder="试试输入金额"
-                autofocus
-              />
-            </div>
-            <button type="button" class="primary" id="calc">算一下</button>
-          </div>
-
-          <div class="denom-head">
-            <span class="field-label" style="margin: 0">这次有哪些面额</span>
-            <button type="button" class="toggle-all" id="toggle-all" title="在「全选」和「全不选」之间切换">一键切换全选</button>
-          </div>
-          <div class="denom-grid" id="denom-grid">
-            <label class="denom-option">
-              <input type="checkbox" value="50000" checked />
-              <span>50,000</span>
-            </label>
-            <label class="denom-option">
-              <input type="checkbox" value="25000" checked />
-              <span>25,000</span>
-            </label>
-            <label class="denom-option">
-              <input type="checkbox" value="10000" checked />
-              <span>10,000</span>
-            </label>
-            <label class="denom-option">
-              <input type="checkbox" value="5000" checked />
-              <span>5,000</span>
-            </label>
-            <label class="denom-option">
-              <input type="checkbox" value="1000" checked />
-              <span>1,000</span>
-            </label>
-          </div>
-
-          <p class="hint">
-            小提示：算法会从大到小尽量用大钞，和 Excel 里手工凑整的思路一样——你只要选对「这次钱包里有哪些纸币」就行。
-          </p>
-
-          <div class="error" id="error"></div>
-
-          <div class="result" id="result">
-            <h2 class="result__title">拆好的结果</h2>
-            <div class="table-wrap">
-              <table class="result-table" aria-label="分配明细">
-                <thead>
-                  <tr>
-                    <th>面额</th>
-                    <th>张数</th>
-                    <th>小计</th>
-                  </tr>
-                </thead>
-                <tbody id="result-body"></tbody>
-              </table>
-            </div>
-            <div class="subtotal" id="subtotal-row">
-              <span>纸币合计</span>
-              <span id="subtotal">—</span>
-            </div>
-            <div class="alert" id="leftover-alert" style="display: none"></div>
-          </div>
-
-          <section class="batch-panel" aria-label="批量 Excel">
-            <div class="panel__inner" style="padding: 0; border: none; background: transparent; backdrop-filter: none">
-              <span class="field-label">批量 Excel（可选）</span>
-              <p class="hint" style="margin-top: 0; padding-top: 0; border: none; margin-bottom: 1rem">
-                列顺序固定：A 姓名 · B 薪水 · C～G 五种张数（50000～1000）。导入只读姓名和薪水，张数会按上面的面额设置自动算好；导出后每人一行，一目了然。
-              </p>
-              <div class="batch-toolbar">
-                <input type="file" id="excel-file" accept=".xlsx,.xls,.csv" />
-                <button type="button" class="secondary" id="btn-import">导入 Excel</button>
-                <button type="button" class="secondary" id="btn-recalc" disabled title="使用上次导入的数据">按面额重算</button>
-                <button type="button" class="secondary" id="btn-export" disabled>导出 Excel</button>
-              </div>
-              <p class="batch-meta" id="batch-status"></p>
-              <div class="batch-error" id="batch-error"></div>
-              <div class="batch-scroll" id="batch-wrap" style="display: none">
-                <table class="batch-table" id="batch-table" aria-label="批量配钞结果">
-                  <thead>
-                    <tr>
-                      <th>姓名</th>
-                      <th>薪水</th>
-                      <th>50000</th>
-                      <th>25000</th>
-                      <th>10000</th>
-                      <th>5000</th>
-                      <th>1000</th>
-                      <th>余数</th>
-                    </tr>
-                  </thead>
-                  <tbody id="batch-body"></tbody>
-                </table>
-              </div>
-              <p class="lib-hint">
-                Excel 功能需要同目录下的 <code>xlsx.full.min.js</code>（SheetJS）。没有它的话，批量导入导出会暂时不可用，放进文件夹里刷新就好。
-              </p>
-            </div>
-          </section>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand__mark" aria-hidden="true"></div>
+        <div>
+          <div class="brand__title">薪酬纸币计算器</div>
+          <div class="brand__sub">Cash Distribution Console</div>
         </div>
       </div>
+      <div class="topbar__meta">
+        <div class="meta-item">
+          <span class="k">Algo</span>
+          <span class="v">Greedy / Desc</span>
+        </div>
+        <div class="meta-item">
+          <span class="k">Denoms</span>
+          <span class="v" id="topbar-denoms">5 / 5</span>
+        </div>
+        <span class="live-dot">LIVE</span>
+      </div>
+    </header>
 
-      <footer>单机计算随时可用；配上同目录的 xlsx.full.min.js，批量表格也能离线搞定。</footer>
+    <div class="wrap">
+      <div class="page-title">
+        <h1>配钞策略 · 分配可视化</h1>
+        <span class="tag">v1.1 · TABULAR</span>
+      </div>
+
+      <div class="grid">
+        <!-- 左：策略输入 -->
+        <section class="card" aria-label="策略输入">
+          <div class="card__head">
+            <div class="card__title">Strategy Input</div>
+            <div class="card__hint">本地计算 · 不上传</div>
+          </div>
+          <div class="card__body">
+            <label class="label" for="amount">应付金额 / Payable Amount</label>
+            <input
+              id="amount"
+              class="input"
+              type="number"
+              inputmode="numeric"
+              min="0"
+              step="1"
+              placeholder="如：137,500"
+              autofocus
+            />
+            <div class="row-actions">
+              <button type="button" class="btn btn--primary" id="calc">运行配钞策略</button>
+              <button type="button" class="btn btn--icon" id="toggle-all" title="切换全选/清空">⇋ ALL</button>
+            </div>
+
+            <div class="denom-head">
+              <span class="label" style="margin: 0">可用面额 / Available Notes</span>
+              <span class="card__hint" id="denoms-status">5 / 5 active</span>
+            </div>
+            <div class="denom-grid" id="denom-grid">
+              <label class="chip" data-i="0">
+                <input type="checkbox" value="50000" checked />
+                <span class="chip__face">
+                  <span class="chip__amount">50,000</span>
+                  <span class="chip__tag">N1</span>
+                </span>
+                <span class="chip__dot" aria-hidden="true"></span>
+              </label>
+              <label class="chip" data-i="1">
+                <input type="checkbox" value="25000" checked />
+                <span class="chip__face">
+                  <span class="chip__amount">25,000</span>
+                  <span class="chip__tag">N2</span>
+                </span>
+                <span class="chip__dot" aria-hidden="true"></span>
+              </label>
+              <label class="chip" data-i="2">
+                <input type="checkbox" value="10000" checked />
+                <span class="chip__face">
+                  <span class="chip__amount">10,000</span>
+                  <span class="chip__tag">N3</span>
+                </span>
+                <span class="chip__dot" aria-hidden="true"></span>
+              </label>
+              <label class="chip" data-i="3">
+                <input type="checkbox" value="5000" checked />
+                <span class="chip__face">
+                  <span class="chip__amount">5,000</span>
+                  <span class="chip__tag">N4</span>
+                </span>
+                <span class="chip__dot" aria-hidden="true"></span>
+              </label>
+              <label class="chip" data-i="4">
+                <input type="checkbox" value="1000" checked />
+                <span class="chip__face">
+                  <span class="chip__amount">1,000</span>
+                  <span class="chip__tag">N5</span>
+                </span>
+                <span class="chip__dot" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <p class="hint">策略 · 自最大面额起向下贪心分配，余数保留至最低单位；与 Excel 手工凑整等价。</p>
+
+            <div class="alert alert--err" id="error"></div>
+          </div>
+        </section>
+
+        <!-- 右：可视化输出 -->
+        <section class="card" aria-label="分配可视化">
+          <div class="card__head">
+            <div class="card__title">Distribution Output</div>
+            <div class="card__hint" id="output-stamp">awaiting input</div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi kpi--accent">
+              <span class="kpi__k">Target</span>
+              <span class="kpi__v" id="kpi-target">—</span>
+              <span class="kpi__delta" id="kpi-target-sub">payable amount</span>
+            </div>
+            <div class="kpi kpi--ok">
+              <span class="kpi__k">Allocated</span>
+              <span class="kpi__v" id="kpi-paper">—</span>
+              <span class="kpi__delta" id="kpi-paper-sub">cash assembled</span>
+            </div>
+            <div class="kpi kpi--warn">
+              <span class="kpi__k">Remainder</span>
+              <span class="kpi__v" id="kpi-rem">—</span>
+              <span class="kpi__delta" id="kpi-rem-sub">uncovered residual</span>
+            </div>
+          </div>
+
+          <div id="viz-wrap">
+            <div class="empty-viz" id="viz-empty">// 输入金额后运行策略，结果将在此渲染 ——</div>
+
+            <div class="viz" id="viz" style="display:none">
+              <div class="donut-wrap">
+                <svg class="donut" viewBox="0 0 120 120" id="donut">
+                  <circle cx="60" cy="60" r="50" class="donut__track"></circle>
+                </svg>
+                <div class="donut__center">
+                  <span class="k">Coverage</span>
+                  <span class="v" id="donut-coverage">—</span>
+                  <span class="sub" id="donut-sub">of target</span>
+                </div>
+              </div>
+              <div class="bars" id="bars"></div>
+            </div>
+
+            <div class="alert alert--warn" id="leftover-alert"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 批量 Excel -->
+      <section class="card" aria-label="批量Excel" style="margin-top:1rem">
+        <div class="card__head">
+          <div class="card__title">Batch Excel · 多人配钞</div>
+          <div class="card__hint">A=姓名 · B=薪水 · C~G=张数（导入仅读 A、B）</div>
+        </div>
+        <div class="toolbar">
+          <input type="file" id="excel-file" accept=".xlsx,.xls,.csv" />
+          <button type="button" class="btn" id="btn-import">导入 Excel</button>
+          <button type="button" class="btn" id="btn-recalc" disabled>按面额重算</button>
+          <button type="button" class="btn btn--primary" id="btn-export" disabled style="flex:0 0 auto">导出 Excel</button>
+          <span class="spacer"></span>
+          <span class="toolbar__status" id="batch-status"></span>
+        </div>
+        <div class="card__body" style="padding:0">
+          <div class="alert alert--err" id="batch-error" style="margin:0.85rem 1rem"></div>
+          <div class="batch-empty" id="batch-empty">// 未导入数据 ——</div>
+          <div class="batch-scroll" id="batch-wrap" style="display:none">
+            <table class="grid-table" id="batch-table">
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>薪水</th>
+                  <th>50,000</th>
+                  <th>25,000</th>
+                  <th>10,000</th>
+                  <th>5,000</th>
+                  <th>1,000</th>
+                  <th>余数</th>
+                </tr>
+              </thead>
+              <tbody id="batch-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <footer>LOCAL COMPUTE · TABULAR FIGURES · NO TELEMETRY</footer>
     </div>
 
     <script src="xlsx.full.min.js"></script>
@@ -833,6 +979,13 @@
       (function () {
         const DEFAULT_DENOMS = [50000, 25000, 10000, 5000, 1000];
         const DENOM_ORDER = [50000, 25000, 10000, 5000, 1000];
+        const SERIES_COLORS = {
+          50000: getCssVar("--series-1") || "#60a5fa",
+          25000: getCssVar("--series-2") || "#38bdf8",
+          10000: getCssVar("--series-3") || "#22d3ee",
+          5000: getCssVar("--series-4") || "#818cf8",
+          1000: getCssVar("--series-5") || "#a78bfa",
+        };
         const EXPORT_HEADERS = [
           "姓名",
           "薪水",
@@ -843,58 +996,50 @@
           "1000纸币",
         ];
 
-        /** @type {{ name: string, salary: number, counts: Record<number, number>, remainder: number }[]} */
-        let batchRows = [];
-        /** @type {unknown[][] | null} 上次解析出的原始行，便于改面额后重算 */
-        let lastImportedRows = null;
-
-        /**
-         * @param {number} amount
-         * @param {number[]} denominations
-         */
-        function classify(amount, denominations) {
-          const sorted = [...denominations].sort(function (a, b) {
-            return b - a;
-          });
-          let remainder = Math.trunc(amount);
-          const parts = [];
-          for (let i = 0; i < sorted.length; i++) {
-            const d = sorted[i];
-            if (d <= 0 || !Number.isFinite(d)) continue;
-            if (remainder >= d) {
-              const count = Math.floor(remainder / d);
-              remainder = remainder % d;
-              if (count > 0) parts.push({ denom: d, count: count });
-            }
+        function getCssVar(name) {
+          try {
+            return getComputedStyle(document.documentElement)
+              .getPropertyValue(name)
+              .trim();
+          } catch (e) {
+            return "";
           }
-          return { parts: parts, remainder: remainder };
         }
 
-        /**
-         * @param {{ denom: number, count: number }[]} parts
-         * @returns {Record<number, number>}
-         */
+        /** @type {Array} */
+        let batchRows = [];
+        let lastImportedRows = null;
+
+        function classify(amount, denominations) {
+          const sorted = [...denominations].sort((a, b) => b - a);
+          let remainder = Math.trunc(amount);
+          const parts = [];
+          sorted.forEach((d) => {
+            if (d <= 0 || !Number.isFinite(d)) return;
+            if (remainder >= d) {
+              const count = Math.floor(remainder / d);
+              remainder %= d;
+              if (count > 0) parts.push({ denom: d, count });
+            }
+          });
+          return { parts, remainder };
+        }
+
         function partsToCounts(parts) {
           const counts = {};
-          DENOM_ORDER.forEach(function (d) {
-            counts[d] = 0;
-          });
-          parts.forEach(function (p) {
-            counts[p.denom] = p.count;
-          });
+          DENOM_ORDER.forEach((d) => (counts[d] = 0));
+          parts.forEach((p) => (counts[p.denom] = p.count));
           return counts;
         }
 
         function formatInt(n) {
-          return n.toLocaleString("zh-CN");
+          return Number(n || 0).toLocaleString("en-US");
         }
 
         function parseSalary(v) {
           if (v === "" || v === null || v === undefined) return NaN;
           if (typeof v === "number" && !Number.isNaN(v)) return Math.round(v);
-          const s = String(v)
-            .trim()
-            .replace(/[,，\s]/g, "");
+          const s = String(v).trim().replace(/[,，\s]/g, "");
           const n = parseFloat(s);
           return Number.isFinite(n) ? Math.round(n) : NaN;
         }
@@ -910,20 +1055,30 @@
 
         function isEmptyRow(row) {
           if (!row || !row.length) return true;
-          return row.every(function (c) {
-            return c === "" || c === null || c === undefined;
-          });
+          return row.every((c) => c === "" || c === null || c === undefined);
         }
 
+        // DOM
         const amountEl = document.getElementById("amount");
         const calcBtn = document.getElementById("calc");
-        const resultEl = document.getElementById("result");
-        const resultBody = document.getElementById("result-body");
-        const subtotalEl = document.getElementById("subtotal");
-        const leftoverAlert = document.getElementById("leftover-alert");
         const errorEl = document.getElementById("error");
         const toggleAllBtn = document.getElementById("toggle-all");
         const grid = document.getElementById("denom-grid");
+        const denomsStatus = document.getElementById("denoms-status");
+        const topbarDenoms = document.getElementById("topbar-denoms");
+
+        const vizEmpty = document.getElementById("viz-empty");
+        const viz = document.getElementById("viz");
+        const donut = document.getElementById("donut");
+        const donutCoverage = document.getElementById("donut-coverage");
+        const donutSub = document.getElementById("donut-sub");
+        const bars = document.getElementById("bars");
+        const leftoverAlert = document.getElementById("leftover-alert");
+        const outputStamp = document.getElementById("output-stamp");
+
+        const kpiTarget = document.getElementById("kpi-target");
+        const kpiPaper = document.getElementById("kpi-paper");
+        const kpiRem = document.getElementById("kpi-rem");
 
         const excelFileEl = document.getElementById("excel-file");
         const btnImport = document.getElementById("btn-import");
@@ -933,14 +1088,22 @@
         const batchError = document.getElementById("batch-error");
         const batchWrap = document.getElementById("batch-wrap");
         const batchBody = document.getElementById("batch-body");
+        const batchEmpty = document.getElementById("batch-empty");
 
         function getSelectedDenoms() {
           const boxes = grid.querySelectorAll('input[type="checkbox"]');
           const out = [];
-          boxes.forEach(function (cb) {
+          boxes.forEach((cb) => {
             if (cb.checked) out.push(Number(cb.value));
           });
           return out;
+        }
+
+        function updateDenomsStatus() {
+          const total = DENOM_ORDER.length;
+          const active = getSelectedDenoms().length;
+          if (denomsStatus) denomsStatus.textContent = active + " / " + total + " active";
+          if (topbarDenoms) topbarDenoms.textContent = active + " / " + total;
         }
 
         function showError(msg) {
@@ -963,36 +1126,164 @@
           batchError.classList.remove("visible");
         }
 
+        function renderDonut(parts, target) {
+          // 清掉旧分段
+          donut.querySelectorAll(".donut__seg").forEach((n) => n.remove());
+
+          const r = 50;
+          const C = 2 * Math.PI * r;
+          const total = Math.max(target, 1);
+          let offset = 0;
+
+          parts.forEach((p) => {
+            const value = p.denom * p.count;
+            const len = (value / total) * C;
+            const seg = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "circle",
+            );
+            seg.setAttribute("cx", "60");
+            seg.setAttribute("cy", "60");
+            seg.setAttribute("r", String(r));
+            seg.setAttribute("class", "donut__seg");
+            seg.setAttribute("stroke", SERIES_COLORS[p.denom] || "#60a5fa");
+            seg.setAttribute("stroke-dasharray", "0 " + C);
+            seg.setAttribute("stroke-dashoffset", String(-offset));
+            donut.appendChild(seg);
+            requestAnimationFrame(() => {
+              seg.setAttribute("stroke-dasharray", len + " " + (C - len));
+            });
+            offset += len;
+          });
+        }
+
+        function renderBars(parts, paperSum) {
+          bars.innerHTML = "";
+          if (!parts.length) {
+            bars.innerHTML = '<div class="card__hint">// 无可分配项</div>';
+            return;
+          }
+          const maxValue = Math.max.apply(null, parts.map((p) => p.denom * p.count));
+          parts.forEach((p) => {
+            const value = p.denom * p.count;
+            const pct = Math.max(2, Math.round((value / maxValue) * 100));
+            const color = SERIES_COLORS[p.denom] || "#60a5fa";
+
+            const row = document.createElement("div");
+            row.className = "bar";
+            row.innerHTML =
+              '<span class="bar__face"><span class="bar__dot" style="background:' +
+              color +
+              '"></span>' +
+              formatInt(p.denom) +
+              "</span>" +
+              '<span class="bar__track"><span class="bar__fill" style="background:linear-gradient(90deg,' +
+              color +
+              ', ' +
+              color +
+              '88)"></span></span>' +
+              '<span class="bar__value">' +
+              formatInt(value) +
+              "</span>" +
+              '<span class="bar__count">×' +
+              p.count +
+              "</span>";
+            bars.appendChild(row);
+            requestAnimationFrame(() => {
+              const fill = row.querySelector(".bar__fill");
+              if (fill) fill.style.width = pct + "%";
+            });
+          });
+        }
+
+        function nowStamp() {
+          const d = new Date();
+          const pad = (n) => (n < 10 ? "0" + n : "" + n);
+          return (
+            pad(d.getHours()) +
+            ":" +
+            pad(d.getMinutes()) +
+            ":" +
+            pad(d.getSeconds())
+          );
+        }
+
+        function render() {
+          clearError();
+          const raw = amountEl.value.trim();
+          const amount = raw === "" ? NaN : Number(raw);
+
+          if (!Number.isFinite(amount) || raw === "") {
+            showError("请输入有效金额 / Enter a valid amount.");
+            return;
+          }
+          if (amount < 0) {
+            showError("金额不能为负 / Amount must be non-negative.");
+            return;
+          }
+
+          const denoms = getSelectedDenoms();
+          if (denoms.length === 0) {
+            showError("至少勾选一种面额 / Select at least one note.");
+            return;
+          }
+
+          const { parts, remainder } = classify(amount, denoms);
+          const paperSum = parts.reduce((s, p) => s + p.denom * p.count, 0);
+
+          kpiTarget.textContent = formatInt(amount);
+          kpiPaper.textContent = formatInt(paperSum);
+          kpiRem.textContent = formatInt(remainder);
+          outputStamp.textContent = "computed @ " + nowStamp();
+
+          const coverage = amount > 0 ? Math.round((paperSum / amount) * 1000) / 10 : 0;
+          donutCoverage.textContent = coverage.toFixed(1) + "%";
+          donutSub.textContent = formatInt(paperSum) + " / " + formatInt(amount);
+
+          renderDonut(parts, amount);
+          renderBars(parts, paperSum);
+
+          vizEmpty.style.display = "none";
+          viz.style.display = "grid";
+
+          if (remainder > 0) {
+            leftoverAlert.classList.add("visible");
+            leftoverAlert.textContent =
+              "残值 " +
+              formatInt(remainder) +
+              " 无法用当前面额完整覆盖，建议补充零钱或增加可用面额。";
+          } else {
+            leftoverAlert.classList.remove("visible");
+          }
+        }
+
         function renderBatchTable() {
           batchBody.innerHTML = "";
-          batchRows.forEach(function (row) {
+          batchRows.forEach((row) => {
             const tr = document.createElement("tr");
-
-            const tdName = document.createElement("td");
-            tdName.className = "name-cell";
-            tdName.textContent = String(row.name);
-            tdName.title = String(row.name);
-            tr.appendChild(tdName);
-
-            function addNum(text) {
+            const cells = [
+              row.name,
+              formatInt(row.salary),
+              row.counts[50000],
+              row.counts[25000],
+              row.counts[10000],
+              row.counts[5000],
+              row.counts[1000],
+            ];
+            cells.forEach((c) => {
               const td = document.createElement("td");
-              td.className = "num";
-              td.textContent = text;
+              td.textContent = String(c);
               tr.appendChild(td);
+            });
+            const remTd = document.createElement("td");
+            if (row.remainder > 0) {
+              remTd.className = "rem-warn";
+              remTd.textContent = formatInt(row.remainder);
+            } else {
+              remTd.className = "rem-zero";
+              remTd.textContent = "—";
             }
-
-            addNum(formatInt(row.salary));
-            addNum(String(row.counts[50000]));
-            addNum(String(row.counts[25000]));
-            addNum(String(row.counts[10000]));
-            addNum(String(row.counts[5000]));
-            addNum(String(row.counts[1000]));
-
-            const tdRem = document.createElement("td");
-            tdRem.className = row.remainder > 0 ? "warn-cell" : "num";
-            tdRem.textContent = row.remainder > 0 ? formatInt(row.remainder) : "—";
-            tr.appendChild(tdRem);
-
+            tr.appendChild(remTd);
             batchBody.appendChild(tr);
           });
         }
@@ -1001,9 +1292,10 @@
           lastImportedRows = rows;
           const denoms = getSelectedDenoms();
           if (denoms.length === 0) {
-            showBatchError("先在上方勾至少一种纸币面额，我们再往下算～");
+            showBatchError("先在左侧勾选至少一种面额。");
             batchRows = [];
             batchWrap.style.display = "none";
+            batchEmpty.style.display = "block";
             btnExport.disabled = true;
             btnRecalc.disabled = !lastImportedRows || lastImportedRows.length === 0;
             batchStatus.textContent = "";
@@ -1022,18 +1314,14 @@
             const name = String(row[0] ?? "").trim();
             const salary = parseSalary(row[1]);
             if (!name && !Number.isFinite(salary)) continue;
-            if (!Number.isFinite(salary)) {
-              badLines.push(i + 1);
-              continue;
-            }
-            if (salary < 0) {
+            if (!Number.isFinite(salary) || salary < 0) {
               badLines.push(i + 1);
               continue;
             }
             const res = classify(salary, denoms);
             out.push({
               name: name || "（未命名）",
-              salary: salary,
+              salary,
               counts: partsToCounts(res.parts),
               remainder: res.remainder,
             });
@@ -1041,59 +1329,83 @@
 
           clearBatchError();
           if (badLines.length) {
-            showBatchError("以下行薪水无效已跳过（行号按表格从上到下计数）：" + badLines.join(", "));
+            showBatchError("已跳过 " + badLines.length + " 行无效数据（行号：" + badLines.join(",") + "）。");
           }
 
           batchRows = out;
-          if (out.length === 0) {
+          if (!out.length) {
             batchWrap.style.display = "none";
+            batchEmpty.style.display = "block";
             btnExport.disabled = true;
             btnRecalc.disabled = !lastImportedRows || lastImportedRows.length === 0;
-            batchStatus.textContent = "目前还没有有效数据，看看 A、B 列姓名和薪水填好了吗？";
+            batchStatus.textContent = "no valid rows · check column A/B";
             return;
           }
 
           batchStatus.textContent =
-            "已读到 " + out.length + " 人 · 已按当前面额算好张数 · 需要的话可以导出 Excel";
+            "loaded " + out.length + " rows · recomputed @ " + nowStamp();
           renderBatchTable();
           batchWrap.style.display = "block";
+          batchEmpty.style.display = "none";
           btnExport.disabled = false;
           btnRecalc.disabled = false;
         }
 
         function ensureXLSX() {
           if (typeof XLSX === "undefined") {
-            showBatchError(
-              "未加载 SheetJS，无法读写 Excel。请检查网络后刷新页面，或将 xlsx.full.min.js 放到本页同目录并修改 HTML 中的 script 引用。"
-            );
+            showBatchError("SheetJS 未加载，无法读写 Excel。请确认 xlsx.full.min.js 在同目录。");
             return false;
           }
           return true;
         }
 
-        btnImport.addEventListener("click", function () {
+        // 事件绑定
+        calcBtn.addEventListener("click", render);
+        amountEl.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") render();
+        });
+
+        let allOn = true;
+        toggleAllBtn.addEventListener("click", () => {
+          allOn = !allOn;
+          grid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+            cb.checked = allOn;
+          });
+          updateDenomsStatus();
+        });
+
+        grid.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+          cb.addEventListener("change", () => {
+            const checked = getSelectedDenoms().length;
+            if (checked === DEFAULT_DENOMS.length) allOn = true;
+            else if (checked === 0) allOn = false;
+            updateDenomsStatus();
+          });
+        });
+
+        btnImport.addEventListener("click", () => {
           clearBatchError();
           if (!ensureXLSX()) return;
           excelFileEl.click();
         });
 
-        btnRecalc.addEventListener("click", function () {
+        btnRecalc.addEventListener("click", () => {
           clearBatchError();
           if (!lastImportedRows || !lastImportedRows.length) {
-            showBatchError("还没有导入表格，先选一份 Excel 吧。");
+            showBatchError("还没有导入表格。");
             return;
           }
           processImportedRows(lastImportedRows);
         });
 
-        excelFileEl.addEventListener("change", function () {
+        excelFileEl.addEventListener("change", () => {
           const file = excelFileEl.files && excelFileEl.files[0];
           excelFileEl.value = "";
           if (!file) return;
           if (!ensureXLSX()) return;
 
           const reader = new FileReader();
-          reader.onload = function (ev) {
+          reader.onload = (ev) => {
             try {
               const data = new Uint8Array(ev.target.result);
               const wb = XLSX.read(data, { type: "array" });
@@ -1103,7 +1415,10 @@
                 return;
               }
               const sheet = wb.Sheets[sn];
-              const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+              const rows = XLSX.utils.sheet_to_json(sheet, {
+                header: 1,
+                defval: "",
+              });
               processImportedRows(rows);
             } catch (err) {
               showBatchError("解析失败：" + (err && err.message ? err.message : String(err)));
@@ -1112,16 +1427,16 @@
           reader.readAsArrayBuffer(file);
         });
 
-        btnExport.addEventListener("click", function () {
+        btnExport.addEventListener("click", () => {
           clearBatchError();
           if (!ensureXLSX()) return;
           if (!batchRows.length) {
-            showBatchError("暂时没有可导出的数据，先导入一份表格试试。");
+            showBatchError("没有可导出数据。");
             return;
           }
 
           const aoa = [EXPORT_HEADERS];
-          batchRows.forEach(function (r) {
+          batchRows.forEach((r) => {
             aoa.push([
               r.name,
               r.salary,
@@ -1135,20 +1450,13 @@
 
           const ws = XLSX.utils.aoa_to_sheet(aoa);
           ws["!cols"] = [
-            { wch: 12 },
-            { wch: 12 },
-            { wch: 10 },
-            { wch: 10 },
-            { wch: 10 },
-            { wch: 10 },
-            { wch: 10 },
+            { wch: 12 }, { wch: 12 }, { wch: 10 },
+            { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 },
           ];
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "配钞结果");
 
-          const pad = function (n) {
-            return n < 10 ? "0" + n : String(n);
-          };
+          const pad = (n) => (n < 10 ? "0" + n : "" + n);
           const d = new Date();
           const fname =
             "薪酬配钞导出_" +
@@ -1163,95 +1471,7 @@
           XLSX.writeFile(wb, fname);
         });
 
-        function render() {
-          clearError();
-          const raw = amountEl.value.trim();
-          const amount = raw === "" ? NaN : Number(raw);
-
-          if (!Number.isFinite(amount) || raw === "") {
-            showError("这里需要填一个数字哦。");
-            resultEl.classList.remove("visible");
-            return;
-          }
-          if (amount < 0) {
-            showError("金额不能是负数呀。");
-            resultEl.classList.remove("visible");
-            return;
-          }
-
-          const denoms = getSelectedDenoms();
-          if (denoms.length === 0) {
-            showError("至少勾一种纸币面额，才知道怎么拆～");
-            resultEl.classList.remove("visible");
-            return;
-          }
-
-          const classified = classify(amount, denoms);
-          const parts = classified.parts;
-          const remainder = classified.remainder;
-          resultBody.innerHTML = "";
-
-          if (parts.length === 0 && amount > 0) {
-            const tr = document.createElement("tr");
-            tr.innerHTML =
-              '<td colspan="3" class="muted-cell">这个金额比目前选的最小面额还小，先勾一种更小的面额或改下金额吧。</td>';
-            resultBody.appendChild(tr);
-          } else {
-            parts.forEach(function (p) {
-              const tr = document.createElement("tr");
-              const sub = p.denom * p.count;
-              tr.innerHTML =
-                "<td>" +
-                formatInt(p.denom) +
-                "</td><td>" +
-                p.count +
-                "</td><td>" +
-                formatInt(sub) +
-                "</td>";
-              resultBody.appendChild(tr);
-            });
-          }
-
-          const paperSum = parts.reduce(function (s, p) {
-            return s + p.denom * p.count;
-          }, 0);
-          subtotalEl.textContent = formatInt(paperSum);
-
-          if (remainder > 0) {
-            leftoverAlert.style.display = "block";
-            leftoverAlert.textContent =
-              "还剩 " +
-              formatInt(remainder) +
-              " 没法用当前纸币刚好凑满——可以准备零钱，或者回去勾一下有没有别的面额。";
-          } else {
-            leftoverAlert.style.display = "none";
-          }
-
-          resultEl.classList.remove("visible");
-          void resultEl.offsetWidth;
-          resultEl.classList.add("visible");
-        }
-
-        calcBtn.addEventListener("click", render);
-        amountEl.addEventListener("keydown", function (e) {
-          if (e.key === "Enter") render();
-        });
-
-        let allOn = true;
-        toggleAllBtn.addEventListener("click", function () {
-          allOn = !allOn;
-          grid.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
-            cb.checked = allOn;
-          });
-        });
-
-        grid.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
-          cb.addEventListener("change", function () {
-            const checked = getSelectedDenoms().length;
-            if (checked === DEFAULT_DENOMS.length) allOn = true;
-            else if (checked === 0) allOn = false;
-          });
-        });
+        updateDenomsStatus();
       })();
     </script>
   </body>

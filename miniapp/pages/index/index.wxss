@@ -1,20 +1,3 @@
-﻿.hero {
-  margin-bottom: 20rpx;
-}
-
-.title {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.subtitle {
-  margin-top: 8rpx;
-  color: #64748b;
-  font-size: 24rpx;
-  line-height: 1.6;
-}
-
 .section-label {
   margin-top: 20rpx;
   margin-bottom: 10rpx;
@@ -47,6 +30,17 @@
   align-items: center;
 }
 
+.denom-row {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-tiny--right {
+  margin-left: auto;
+  margin-right: -24rpx;
+  flex-shrink: 0;
+}
+
 .btn-tiny {
   margin: 0;
   padding: 8rpx 20rpx;
@@ -60,9 +54,13 @@
 
 .denom-grid {
   margin-top: 6rpx;
+}
+
+.denom-grid checkbox-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12rpx;
+  width: 100%;
 }
 
 .denom-item {
@@ -78,6 +76,10 @@
 
 .calc-btn {
   margin-top: 24rpx;
+}
+
+.calc-btn.is-busy {
+  opacity: 0.88;
 }
 
 .result-table {

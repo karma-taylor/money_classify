@@ -11,7 +11,7 @@
     <view class="btn-row">
       <button class="btn-secondary" bindtap="pickExcel">导入 Excel</button>
       <button class="btn-secondary" bindtap="recalc" disabled="{{!hasImported}}">按面额重算</button>
-      <button class="btn-primary" bindtap="exportExcel" disabled="{{!rows.length}}">导出 Excel</button>
+      <button class="btn-primary btn-row-span" bindtap="exportExcel" disabled="{{!rows.length}}">导出 Excel</button>
     </view>
 
     <view wx:if="{{statusMsg}}" class="helper status">{{statusMsg}}</view>

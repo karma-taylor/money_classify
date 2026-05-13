@@ -10,6 +10,7 @@ Page({
       label: formatInt(d),
       checked: true,
     })),
+    isCalculating: false,
     errorMsg: '',
     hasResult: false,
     parts: [],
@@ -59,6 +60,8 @@ Page({
   },
 
   handleCalculate() {
+    if (this.data.isCalculating) return;
+
     const raw = this.data.amountInput.trim();
     const amount = Number(raw);
     if (!raw || !Number.isFinite(amount)) {
@@ -78,21 +81,26 @@ Page({
 
     wx.setStorageSync('selectedDenoms', selected);
 
-    const { parts, remainder } = classify(amount, selected);
-    const displayParts = parts.map((p) => ({
-      ...p,
-      label: formatInt(p.denom),
-      subtotalLabel: formatInt(p.denom * p.count),
-    }));
-    const paperSum = displayParts.reduce((s, p) => s + p.denom * p.count, 0);
+    this.setData({ isCalculating: true, errorMsg: '' });
 
-    this.setData({
-      errorMsg: '',
-      hasResult: true,
-      parts: displayParts,
-      remainder,
-      remainderLabel: formatInt(remainder),
-      paperSumLabel: formatInt(paperSum),
-    });
+    setTimeout(() => {
+      const { parts, remainder } = classify(amount, selected);
+      const displayParts = parts.map((p) => ({
+        ...p,
+        label: formatInt(p.denom),
+        subtotalLabel: formatInt(p.denom * p.count),
+      }));
+      const paperSum = displayParts.reduce((s, p) => s + p.denom * p.count, 0);
+
+      this.setData({
+        isCalculating: false,
+        errorMsg: '',
+        hasResult: true,
+        parts: displayParts,
+        remainder,
+        remainderLabel: formatInt(remainder),
+        paperSumLabel: formatInt(paperSum),
+      });
+    }, 80);
   },
 });

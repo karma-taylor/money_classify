@@ -1,3 +1,5 @@
-﻿{
-  "navigationBarTitleText": "单笔配钞"
+{
+  "navigationBarTitleText": "轻松配钞",
+  "navigationBarTextStyle": "black",
+  "navigationBarBackgroundColor": "#ffffff"
 }

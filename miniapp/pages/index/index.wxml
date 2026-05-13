@@ -1,24 +1,25 @@
 ﻿<view class="container">
-  <view class="card hero">
-    <view class="title">薪酬配钞计算器</view>
-    <view class="subtitle">从大面额往下拆，支持 50000/25000/10000/5000/1000</view>
-
+  <view class="card">
     <view class="section-label">输入金额</view>
     <input class="amount-input" type="digit" placeholder="输入数字金额" value="{{amountInput}}" bindinput="onAmountInput" />
 
-    <view class="row space-between center">
+    <view class="denom-row row space-between center">
       <view class="section-label no-margin">可用面额</view>
-      <button class="btn-tiny" bindtap="toggleAll">一键切换全选</button>
+      <button class="btn-tiny btn-tiny--right" bindtap="toggleAll">一键全选</button>
     </view>
 
     <view class="denom-grid">
-      <label class="denom-item" wx:for="{{denominations}}" wx:key="denom">
-        <checkbox value="{{item.denom}}" checked="{{item.checked}}" bindchange="onCheckboxChange" />
-        <text>{{item.label}}</text>
-      </label>
+      <checkbox-group bindchange="onCheckboxChange">
+        <label class="denom-item" wx:for="{{denominations}}" wx:key="denom">
+          <checkbox value="{{item.denom}}" checked="{{item.checked}}" />
+          <text>{{item.label}}</text>
+        </label>
+      </checkbox-group>
     </view>
 
-    <button class="btn-primary calc-btn" bindtap="handleCalculate">算一下</button>
+    <button class="btn-primary calc-btn {{isCalculating ? 'is-busy' : ''}}" bindtap="handleCalculate" loading="{{isCalculating}}" disabled="{{isCalculating}}">
+      {{isCalculating ? '计算中...' : '算一下'}}
+    </button>
     <view wx:if="{{errorMsg}}" class="error">{{errorMsg}}</view>
   </view>
 

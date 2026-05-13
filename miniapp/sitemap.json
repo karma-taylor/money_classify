@@ -1,3 +1,9 @@
-﻿{
-  "rules": []
+{
+  "desc": "索引规则：默认允许各页面被微信索引（可按需改为 disallow）",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
 }

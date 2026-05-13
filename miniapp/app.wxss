@@ -1,4 +1,4 @@
-﻿page {
+page {
   background: linear-gradient(180deg, #f1f8f6 0%, #eef4ff 100%);
   color: #1e293b;
   font-size: 28rpx;

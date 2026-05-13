@@ -1,16 +1,30 @@
 ﻿{
-  "description": "薪酬配钞小程序",
+  "description": "money classify mini program",
+  "miniprogramRoot": "miniapp/",
+  "projectname": "money_classify",
   "setting": {
-    "urlCheck": false,
     "es6": true,
-    "enhance": true,
     "postcss": true,
-    "minified": true
+    "minified": true,
+    "uglifyFileName": false,
+    "enhance": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useCompilerPlugins": false,
+    "minifyWXML": true,
+    "urlCheck": false
   },
   "compileType": "miniprogram",
   "libVersion": "3.6.3",
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
   "appid": "touristappid",
-  "projectname": "money_classify_miniapp",
-  "miniprogramRoot": "miniapp",
-  "condition": {}
+  "editorSetting": {}
 }
